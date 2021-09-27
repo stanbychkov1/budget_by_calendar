@@ -19,7 +19,7 @@ services:
       dockerfile: ./Dockerfile
     image: stanbychkov/budget_by_calendar:latest
     restart: always
-    command: gunicorn foodgram.wsgi:application --bind 0.0.0.0:8000
+    command: gunicorn budget_by_calendar.wsgi:application --bind 0.0.0.0:8000
     volumes:
       - static_volume:/code/staticfiles
     env_file:
