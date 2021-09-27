@@ -1,0 +1,36 @@
+{% load static %}
+<link href="{% static 'css/navbar-top-fixed.css' %}" rel="stylesheet">
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'index' %}">Бюджет {{ user.username }}</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+      <ul class="navbar-nav me-auto mb-2 mb-md-0">
+          {% if user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="{% url 'calendar_date' %}">Загрузить календарь</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="{% url 'ajax_payment' %}">Неоплаченные сессии</a>
+            </li>
+          {% endif %}
+      </ul>
+
+        {% if user.is_authenticated %}
+            <a href="{% url 'logout' %}" class="btn btn-outline-success" type="submit">Выйти</a>
+        {% else %}
+            <a href="{% url 'login' %}" class="btn btn-outline-success me-2" type="submit">Войти</a>
+            <a href="{% url 'signup' %}" class="btn btn-outline-success me-2" type="submit">Зарегистрироваться</a>
+        {% endif %}
+{#      <form class="d-flex">#}
+{#        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">#}
+{#        <button class="btn btn-outline-success" type="submit">Search</button>#}
+{#      </form>#}
+    </div>
+  </div>
+</nav>
+{% block script %}
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+{% endblock %}

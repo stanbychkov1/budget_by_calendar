@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block content %}
+    <div>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Создать</button>
+    </form>
+
+{#        {{ accrual_balance|intcomma }}#}
+{#        {{ payment_balance|intcomma }}#}
+
+    </div>
+{#    <div>#}
+{#        {% for accrual in object_list %}#}
+{#            {{ accrual }}#}
+{#        {% endfor %}#}
+{#    </div>#}
+{#    <div>#}
+{#        {% for payment in payment_list %}#}
+{#            {{ payment }}#}
+{#        {% endfor %}#}
+{#    </div>#}
+{% endblock content %}

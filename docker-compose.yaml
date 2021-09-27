@@ -1,0 +1,36 @@
+version: '3.3'
+
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:
+
+services:
+  db:
+    image: postgres:12.4
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./.env
+
+  web:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: stanbychkov/budget_by_calendar:latest
+    restart: always
+    command: gunicorn foodgram.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - static_volume:/code/staticfiles
+    env_file:
+      - ./.env
+
+  nginx:
+    image: nginx:1.19.6-alpine
+    depends_on:
+      - web
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - static_volume:/code/staticfiles
