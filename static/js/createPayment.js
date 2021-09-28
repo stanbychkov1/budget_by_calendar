@@ -1,3 +1,4 @@
+url = '/ajax/crud/create/'
 $(".createPayment").click(function() {
     var idInput = $('input[name="formId"]').val().trim();
     var patientidInput = $('input[name="formPatientId"]').val().trim();
@@ -7,7 +8,7 @@ $(".createPayment").click(function() {
     if (patientidInput) {
         // Create Ajax Call
         $.ajax({
-            url: '{% url "ajax_crud_create" %}',
+            url: url,
             type: 'get',
             data: {
                 'id': idInput,

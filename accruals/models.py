@@ -13,7 +13,7 @@ class Accrual(models.Model):
     date = models.DateField(db_index=True)
     amount = models.DecimalField(decimal_places=2, max_digits=10)
     payment = models.OneToOneField(to='Payment', related_name='accruals',
-                                   on_delete=models.CASCADE,
+                                   on_delete=models.SET_NULL,
                                    blank=True, null=True)
     info = models.CharField(max_length=200, blank=True, null=True)
     paid = models.BooleanField(default=False)
@@ -47,7 +47,7 @@ class Payment(models.Model):
                              related_name='payments')
     date = models.DateField(db_index=True)
     amount = models.DecimalField(decimal_places=2, max_digits=10)
-    method = models.ForeignKey(to='Method', on_delete=models.CASCADE,
+    method = models.ForeignKey(to='Method', on_delete=models.DO_NOTHING,
                                related_name='payments')
     info = models.CharField(max_length=200, blank=True, null=True)
     patient = models.ForeignKey(to='Patient', on_delete=models.CASCADE,
