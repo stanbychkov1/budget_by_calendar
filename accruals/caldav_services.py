@@ -12,7 +12,7 @@ load_dotenv()
 URL = os.getenv('URL')
 USER_NAME = os.getenv('USER_NAME')
 PASSWORD = os.getenv('PASSWORD')
-CAL_NAME = 'Рабочий'
+CAL_NAME = os.getenv('CAL_NAME')
 
 
 def uploading_calendar_data(start_date, end_date, user_id):
