@@ -28,7 +28,12 @@ def uploading_calendar_data(start_date, end_date, user_id):
 
     for event in events:
         # Получаемую строку события изменяем в словарь
-        event_dict = dict(x.split(':') for x in event.data.split('\n')[:-1])
+        event_dict = {}
+        for elem in event.data.split('\n')[:-1]:
+            if ':' not in elem:
+                elem += ':'
+            new_elem = elem.split(':')
+            event_dict[new_elem[0]] = new_elem[1]
         # Выделяются данные для создания модели
         patient_name, amount, *_ = event_dict['SUMMARY'].split('/')
         date = datetime.datetime.strptime(
