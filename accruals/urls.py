@@ -12,5 +12,5 @@ urlpatterns = [
     path('ajax/crud/create/', views.CreateCrudPaymentView.as_view(),
          name='ajax_crud_create'),
     path('charts/', views.ChartsView.as_view(),
-         name='charts')
+         name='charts'),
 ]

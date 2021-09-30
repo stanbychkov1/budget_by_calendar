@@ -2,24 +2,21 @@
 {% load humanize %}
 {% block content %}
     <div>
-    <form method="post" enctype="multipart/form-data">
+    <form class="card-body" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Создать</button>
+        <label for="id_start_date">Дата начала</label>
+        <input class="form-control" id="id_start_date" type="date" name="start_date" required/>
+        {% if form.errors.start_date %}
+                <ul>{{ form.errors.start_date }}</ul>
+        {% endif %}
+        <label for="id_end_date">Дата конца</label>
+        <input class="form-control" id="id_end_date" type="date" name="end_date" required/>
+        {% if form.errors.end_date %}
+                <ul>{{ form.errors.end_date }}</ul>
+        {% endif %}
+        <div class="card-footer">
+        <button class="btn btn-primary" type="submit">Создать</button>
+        </div>
     </form>
-
-{#        {{ accrual_balance|intcomma }}#}
-{#        {{ payment_balance|intcomma }}#}
-
     </div>
-{#    <div>#}
-{#        {% for accrual in object_list %}#}
-{#            {{ accrual }}#}
-{#        {% endfor %}#}
-{#    </div>#}
-{#    <div>#}
-{#        {% for payment in payment_list %}#}
-{#            {{ payment }}#}
-{#        {% endfor %}#}
-{#    </div>#}
 {% endblock content %}

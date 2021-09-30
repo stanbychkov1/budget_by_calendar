@@ -2,8 +2,8 @@ import datetime
 
 import django_filters.views
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import JsonResponse
-from django.shortcuts import render
+from django.http import JsonResponse, HttpResponseRedirect
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import generic
 
@@ -42,9 +42,13 @@ class CalendarDateFormView(LoginRequiredMixin, generic.FormView):
         start_date = form.cleaned_data.get('start_date')
         end_date = form.cleaned_data.get('end_date')
         user_id = self.request.user.id
-        caldav_services.uploading_calendar_data(start_date, end_date, user_id)
+        errors = caldav_services.uploading_calendar_data(start_date,
+                                                         end_date,
+                                                         user_id)
+        if len(errors) != 0:
+            return render(self.request, 'loading_errors.html',
+                          context={'errors': errors})
         return super().form_valid(form)
-
 
 class AjaxPaymentView(LoginRequiredMixin, django_filters.views.FilterView):
     model = models.Accrual

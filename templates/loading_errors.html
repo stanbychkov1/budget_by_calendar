@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% for error in errors %}
+    <ul>{{ error }}</ul>
+    {% endfor %}
+{% endblock content %}
