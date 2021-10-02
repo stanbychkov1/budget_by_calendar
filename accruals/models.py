@@ -19,7 +19,8 @@ class Accrual(models.Model):
     paid = models.BooleanField(default=False)
     patient = models.ForeignKey(to='Patient', on_delete=models.CASCADE,
                                 related_name='accruals')
-    uuid = models.UUIDField(default=uuid.uuid4, editable=False, blank=True)
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, blank=True,
+                            unique=False)
 
     def __str__(self):
         return f'Сессия с {self.patient.name} от {self.date}' \

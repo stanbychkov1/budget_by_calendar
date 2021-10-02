@@ -1,9 +1,7 @@
-import datetime
-
 import django_filters.views
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import JsonResponse, HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.http import JsonResponse
+from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
 
@@ -50,6 +48,7 @@ class CalendarDateFormView(LoginRequiredMixin, generic.FormView):
                           context={'errors': errors})
         return super().form_valid(form)
 
+
 class AjaxPaymentView(LoginRequiredMixin, django_filters.views.FilterView):
     model = models.Accrual
     template_name = 'ajax_payment.html'
@@ -60,7 +59,7 @@ class AjaxPaymentView(LoginRequiredMixin, django_filters.views.FilterView):
         unpaid_accruals = models.Accrual.objects.filter(
             user=user.id,
             paid=False
-        )
+        ).order_by('date')
         return unpaid_accruals
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -72,6 +71,9 @@ class AjaxPaymentView(LoginRequiredMixin, django_filters.views.FilterView):
                 'methods': methods,
             }
         )
+        # TODO: создать фильтр по клиентов, которые относятся только к
+        #  пользователю, в данный момент выдает всех клиентов ото всех
+        #  пользователей
         return context
 
 
