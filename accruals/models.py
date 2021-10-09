@@ -94,4 +94,4 @@ class Patient(models.Model):
         verbose_name_plural = 'Клиенты'
 
     def __str__(self):
-        return f'Клиент {self.name}'
+        return f'{self.name}'

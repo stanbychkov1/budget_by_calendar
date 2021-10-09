@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% csrf_token %}
+{% load humanize %}
+{% load static %}
+{% block content %}
+<div class="table-responsive">
+  <h1 class="h-25">Начисления</h1>
+    <table id="objectsTable" class="table table-striped table-sm">
+        <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Клиент</th>
+              <th scope="col">Сумма</th>
+              <th scope="col">Оплачено</th>
+              <th scope="col">Дата</th>
+              <th scope="col">Удаление</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for object in object_list %}
+            <tr id="object-{{ object.id }}">
+              <td>{{ forloop.counter }}</td>
+              <td>{{ object.patient }}</td>
+              <td>{{ object.amount|intcomma }}</td>
+              {% if object.paid %}
+                <td>Оплачено</td>
+              {% else %}
+                <td>Неоплачено</td>
+              {% endif %}
+              <td>{{ object.date }}</td>
+            <td><button class="btn btn-success"
+                            onclick="deleteObject({{ object.id }})">Удалить начисление</button></td>
+            </tr>
+        {% empty %}
+            <caption>Нет начислений</caption>
+        {% endfor %}
+        </tbody>
+    </table>
+        {% if page_obj.has_other_pages %}
+            {% include 'includes/paginator.html' with items=page_obj paginator=paginator %}
+        {% endif %}
+    </div>
+
+{% endblock content %}
+{% block scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{% static 'js/getCSRFToken.js' %}"></script>
+    <script src="{% static 'js/deleteObject.js' %}"></script>
+    <script src="{% static 'js/dashboard.js' %}"></script>
+{% endblock %}

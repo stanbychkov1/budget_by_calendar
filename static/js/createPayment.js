@@ -1,4 +1,4 @@
-url = '/ajax/crud/create/'
+url = '/api/payments/'
 $(".createPayment").click(function() {
     var idInput = $('input[name="formId"]').val().trim();
     var patientidInput = $('input[name="formPatientId"]').val().trim();

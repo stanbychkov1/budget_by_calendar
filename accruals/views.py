@@ -31,6 +31,18 @@ class IndexView(LoginRequiredMixin, generic.ListView):
         return context
 
 
+class AccrualView(LoginRequiredMixin, generic.ListView):
+    model = models.Accrual
+    paginate_by = 20
+    template_name = 'accruals.html'
+
+    def get_queryset(self):
+        queryset = models.Accrual.objects.filter(
+            user=self.request.user.id
+        ).order_by('-date')
+        return queryset
+
+
 class CalendarDateFormView(LoginRequiredMixin, generic.FormView):
     form_class = forms.CalendarDateForm
     template_name = 'calendar_date.html'
@@ -75,41 +87,6 @@ class AjaxPaymentView(LoginRequiredMixin, django_filters.views.FilterView):
         #  пользователю, в данный момент выдает всех клиентов ото всех
         #  пользователей
         return context
-
-
-class CreateCrudPaymentView(LoginRequiredMixin, generic.View):
-    def get(self, request):
-        user = self.request.user
-        accrual_id = request.GET.get('id', None)
-        accrual = models.Accrual.objects.get(id=accrual_id)
-        if accrual.paid:
-            return JsonResponse(status=201,
-                                data={'success': True})
-        patient_id = request.GET.get('patient_id', None)
-        amount = request.GET.get('amount', None)
-        date = request.GET.get('date', None)
-        method = request.GET.get('method', None)
-        if len(method) == 0 or method is None:
-            return JsonResponse(status=500,
-                                data={'success': False})
-        if patient_id is None or len(patient_id) == 0:
-            patient_id = accrual.patient_id
-        if amount is None or len(amount) == 0:
-            amount = accrual.amount
-        if date is None or len(date) == 0:
-            date = accrual.date
-        obj = models.Payment.objects.create(
-            user=user,
-            amount=amount,
-            method_id=method,
-            date=date,
-            patient_id=patient_id
-        )
-        accrual.paid = True
-        accrual.payment_id = obj.id
-        accrual.save()
-        return JsonResponse(status=201,
-                            data={'success': True})
 
 
 class ChartsView(LoginRequiredMixin, generic.TemplateView):

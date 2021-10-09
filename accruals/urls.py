@@ -9,8 +9,8 @@ urlpatterns = [
          name='ajax_payment'),
     path('calendar_date/', views.CalendarDateFormView.as_view(),
          name='calendar_date'),
-    path('ajax/crud/create/', views.CreateCrudPaymentView.as_view(),
-         name='ajax_crud_create'),
     path('charts/', views.ChartsView.as_view(),
          name='charts'),
+    path('accruals/', views.AccrualView.as_view(),
+         name='accruals'),
 ]
