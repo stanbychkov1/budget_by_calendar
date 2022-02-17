@@ -4,26 +4,30 @@ from . import models
 
 
 class AccrualAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'user', 'uuid', 'patient', 'payment', 'amount', 'date',)
-    search_fields = ('pk', 'user', 'uuid', 'patient', 'payment', 'amount', 'date',)
+    list_display = ('pk', 'user', 'uuid', 'patient',
+                    'payment', 'amount', 'date',)
+    search_fields = ('pk', 'user__username', 'uuid',
+                     'patient__name', 'payment__method__name',
+                     'amount', 'date',)
     empty_value_display = '-empty-'
 
 
 class PaymentAdmin(admin.ModelAdmin):
     list_display = ('pk', 'user', 'method', 'patient', 'amount', 'date',)
-    search_fields = ('pk', 'user', 'method', 'patient', 'amount', 'date',)
+    search_fields = ('pk', 'user', 'method__name',
+                     'patient__name', 'amount', 'date',)
     empty_value_display = '-empty-'
 
 
 class MethodAdmin(admin.ModelAdmin):
     list_display = ('pk', 'user', 'name',)
-    search_fields = ('pk', 'user', 'name',)
+    search_fields = ('pk', 'user__username', 'name',)
     empty_value_display = '-empty-'
 
 
 class PatientAdmin(admin.ModelAdmin):
     list_display = ('pk', 'user', 'name',)
-    search_fields = ('pk', 'user', 'name',)
+    search_fields = ('pk', 'user__username', 'name',)
     empty_value_display = '-empty-'
 
 

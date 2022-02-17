@@ -23,8 +23,8 @@ class Accrual(models.Model):
                             unique=False)
 
     def __str__(self):
-        return f'Сессия с {self.patient.name} от {self.date}' \
-               f' на сумму {self.amount}'
+        return f'Сессия с {self.patient.name} от {self.date:%d.%m.%y}' \
+               f' на сумму {self.amount:,.0f}'
 
     @property
     def current_amount(self):
@@ -55,8 +55,8 @@ class Payment(models.Model):
                                 related_name='payments')
 
     def __str__(self):
-        return f'Оплата от {self.patient.name} от {self.date}' \
-               f' на сумму {self.amount}'
+        return f'Оплата от {self.patient.name} от {self.date:%d.%m.%y}' \
+               f' на сумму {self.amount:,.0f} на {self.method}'
 
     @property
     def current_amount(self):
