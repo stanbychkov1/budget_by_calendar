@@ -4,6 +4,10 @@ from django.urls import path, include
 
 from . import settings
 
+handler404 = 'accruals.errors.page_not_found'
+handler500 = 'accruals.errors.server_error'
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('users.urls')),

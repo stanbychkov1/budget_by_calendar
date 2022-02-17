@@ -14,7 +14,7 @@ class AccrualAdmin(admin.ModelAdmin):
 
 class PaymentAdmin(admin.ModelAdmin):
     list_display = ('pk', 'user', 'method', 'patient', 'amount', 'date',)
-    search_fields = ('pk', 'user', 'method__name',
+    search_fields = ('pk', 'user__username', 'method__name',
                      'patient__name', 'amount', 'date',)
     empty_value_display = '-empty-'
 
