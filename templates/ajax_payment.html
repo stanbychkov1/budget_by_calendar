@@ -20,7 +20,8 @@
                 <th scope="col">#</th>
               <th scope="col">Клиент</th>
               <th scope="col">Сумма</th>
-                <th scope="col">Дата</th>
+              <th scope="col">Валюта</th>
+              <th scope="col">Дата</th>
               <th scope="col">Создать оплату</th>
             </tr>
         </thead>
@@ -30,9 +31,10 @@
                 <td>{{ forloop.counter }}</td>
                 <td class="accrualPatient accrualData" name="patient">{{ object.patient }}</td>
                 <td class="accrualAmount accrualData" name="amount">{{ object.amount|intcomma }}</td>
+                <td class="accrualCurrency accrualData" name="currency">{{ object.currency }}</td>
                 <td class="accrualDate accrualData" name="date">{{ object.date }}</td>
                 <td><button class="btn btn-success form-control"
-                            onclick="precreatePayment({{ object.id }}, {{ object.patient.id }}, {{ object.amount.real }})"
+                            onclick="precreatePayment({{ object.id }}, {{ object.patient.id }}, {{ object.amount.real }}, {{ object.currency.id }})"
                             data-bs-toggle="modal" data-bs-target="#myModal">Создать оплату</button> </td>
             </tr>
         {% empty %}
@@ -62,7 +64,16 @@
             <label for="form-date">Дата оплаты</label>
             <input class="form-control" id="form-date" type="date" name="formDate"/>
             <label for="form-amount">Сумма</label>
-            <input class="form-control" id="form-amount" type="number" name="formAmount" disabled/>
+            <input class="form-control" id="form-amount" type="number" name="formAmount"/>
+            <label for="form-currency">Валюта оплаты</label>
+            <select class="form-control" id="form-currency" type="" name="formCurrency" required>
+                <option value>------</option>
+                {% if currencies %}
+                    {% for currency in currencies %}
+                        <option value="{{ currency.id }}">{{ currency }}</option>
+                    {% endfor %}
+                {% endif %}
+            </select>
             <label for="form-method">Метод оплаты</label>
             <select class="form-control" id="form-method" type="" name="formMethod" required>
                 <option value>------</option>

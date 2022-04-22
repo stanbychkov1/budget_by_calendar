@@ -1,11 +1,13 @@
 import django_filters.views
+import requests
+import datetime
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
 
-from . import models, forms, caldav_services, filters
+from . import models, forms, caldav_services, filters, tasks
 
 
 class IndexView(LoginRequiredMixin, generic.ListView):
@@ -13,6 +15,7 @@ class IndexView(LoginRequiredMixin, generic.ListView):
     template_name = 'index.html'
 
     def get_queryset(self):
+        task = tasks.upload_rates.delay()
         return models.Accrual.objects.filter(
             user=self.request.user.id).order_by('-date')[:5]
 
@@ -78,9 +81,11 @@ class AjaxPaymentView(LoginRequiredMixin, django_filters.views.FilterView):
         context = super(AjaxPaymentView, self).get_context_data()
         user = self.request.user
         methods = models.Method.objects.filter(user=user)
+        currencies = models.Currency.objects.all().order_by('-priority')
         context.update(
             {
                 'methods': methods,
+                'currencies': currencies,
             }
         )
         # TODO: создать фильтр по клиентов, которые относятся только к

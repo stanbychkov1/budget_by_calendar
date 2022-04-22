@@ -34,3 +34,22 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - static_volume:/code/staticfiles
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+
+  celery:
+    restart: always
+    build:
+      context: .
+    command: celery -A budget_by_calendar worker -l info --concurrency 1 -P solo
+    volumes:
+      - ./web:/web
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+      - redis
+      - web

@@ -1,13 +1,14 @@
 import os
 import datetime
+from decimal import Decimal as dec
 
 import caldav
 from dotenv import load_dotenv
 
 from . import models
+from .calculate_usd_amount import calc_usd_amount
 
 load_dotenv()
-
 
 URL = os.getenv('URL')
 USER_NAME = os.getenv('USER_NAME')
@@ -47,9 +48,25 @@ def uploading_calendar_data(start_date, end_date, user_id):
         UUID = vevent.contents['uid'][0].value
         summary = vevent.contents['summary'][0].value
         try:
-            patient_name, amount, *_ = summary.split('/')
+            currency = models.Currency.objects.get(iso_code='810')
+        except models.Currency.DoesNotExist:
+            currency = None
+        amount_USD = 0
+        try:
+            patient_name, amount, *rest = summary.split('/')
             # создание Начислений, с проверкой на существование
             # уже загруженных начислений
+            if rest:
+                # выделяем валюту начисления
+                iso_title = rest[0]
+                try:
+                    currency = models.Currency.objects.get(iso_title=iso_title)
+                except models.Currency.DoesNotExist:
+                    currency = None
+
+            if currency is not None:
+                amount_USD = calc_usd_amount(currency, amount, date)
+
             if not models.Accrual.objects.filter(uuid=UUID,
                                                  date=date).exists():
                 # Нахождение или создание пациента
@@ -63,11 +80,12 @@ def uploading_calendar_data(start_date, end_date, user_id):
                     date=date,
                     amount=amount,
                     uuid=UUID,
-                    info=summary
+                    info=summary,
+                    currency=currency,
+                    amount_USD=amount_USD
                 )
         except ValueError:
             error_list.append(f'Не загружено событие от {date} c UUID {UUID}'
                               f' и данными {summary}')
             continue
     return error_list
-

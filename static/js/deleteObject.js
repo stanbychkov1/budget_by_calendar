@@ -1,4 +1,4 @@
-url = '/api/accruals/delete/'
+var url = '/api/accruals/delete/'
 function deleteObject(id) {
     if (confirm("Вы уверены, что хотите удалить запись?")) {
         $.ajax({

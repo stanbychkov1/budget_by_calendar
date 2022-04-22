@@ -5,6 +5,7 @@ $(".createPayment").click(function() {
     var dateInput = $('input[name="formDate"]').val().trim();
     var amountInput = $('input[name="formAmount"]').val().trim();
     var methodInput = $('select[name="formMethod"]').val().trim();
+    var currencyInput = $('select[name="formCurrency"]').val().trim();
     if (patientidInput) {
         // Create Ajax Call
         $.ajax({
@@ -15,6 +16,7 @@ $(".createPayment").click(function() {
                 'patient_id': patientidInput,
                 'date': dateInput,
                 'amount': amountInput,
+                'currency': currencyInput,
                 'method': methodInput
             },
             dataType: 'json',
@@ -35,7 +37,7 @@ $(".createPayment").click(function() {
     }
 }
 )
-function precreatePayment(id, patient_id, amount) {
+function precreatePayment(id, patient_id, amount, currency) {
   if (id) {
       tr_id = "#accrual-" + id;
       patient = $(tr_id).find(".accrualPatient").text();
@@ -45,5 +47,7 @@ function precreatePayment(id, patient_id, amount) {
     $('#form-patient').val(patient);
     $('#form-date-session').val(date);
     $('#form-amount').val(amount);
-  }
-}
+    $('#form-currency option').filter(function(){
+        return this.value == currency;
+    }).prop("selected", true);
+}}

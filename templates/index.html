@@ -46,6 +46,7 @@
               <th scope="col">#</th>
               <th scope="col">Клиент</th>
               <th scope="col">Сумма</th>
+              <th scope="col">Валюта</th>
               <th scope="col">Оплачено</th>
               <th scope="col">Дата</th>
             </tr>
@@ -56,6 +57,7 @@
                 <td>{{ forloop.counter }}</td>
               <td>{{ accrual.patient }}</td>
               <td>{{ accrual.amount|intcomma }}</td>
+            <td>{{ accrual.currency }}</td>
               {% if accrual.paid %}
                 <td>Оплачено</td>
               {% else %}
@@ -77,6 +79,7 @@
               <th scope="col">#</th>
               <th scope="col">Клиент</th>
               <th scope="col">Сумма</th>
+                <th scope="col">Валюта</th>
               <th scope="col">Дата</th>
             </tr>
         </thead>
@@ -86,6 +89,7 @@
                 <td>{{ forloop.counter }}</td>
               <td>{{ payment.patient }}</td>
               <td>{{ payment.amount|intcomma }}</td>
+                <td>{{ payment.currency }}</td>
               <td>{{ payment.date }}</td>
             </tr>
         {% empty %}
