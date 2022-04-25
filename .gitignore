@@ -139,3 +139,5 @@ dmypy.json
 
 *.csv
 *.rar
+
+.DS_Store

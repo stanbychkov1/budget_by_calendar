@@ -29,3 +29,5 @@ pyproject.toml
 dump.json
 *.csv
 *.rar
+
+.DS_Store

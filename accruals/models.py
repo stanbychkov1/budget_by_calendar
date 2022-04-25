@@ -46,6 +46,22 @@ class Accrual(models.Model):
         ).aggregate(Sum('amount'))
         return amount['amount__sum']
 
+    @property
+    def current_amount_USD(self):
+        amount = Accrual.objects.filter(
+            user=self.user_id
+        ).aggregate(Sum('amount_USD'))
+        return round(amount['amount_USD__sum'],2 )
+
+    @property
+    def month_amount_USD(self):
+        month = datetime.datetime.now()
+        amount = Accrual.objects.filter(
+            user=self.user_id,
+            date__month=month.strftime('%m')
+        ).aggregate(Sum('amount_USD'))
+        return round(amount['amount_USD__sum'], 2)
+
 
 class Payment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE,
@@ -82,6 +98,22 @@ class Payment(models.Model):
             date__month=month.strftime('%m')
         ).aggregate(Sum('amount'))
         return amount['amount__sum']
+
+    @property
+    def current_amount_USD(self):
+        amount = Payment.objects.filter(
+            user=self.user_id
+        ).aggregate(Sum('amount_USD'))
+        return round(amount['amount_USD__sum'],2)
+
+    @property
+    def month_amount_USD(self):
+        month = datetime.datetime.now()
+        amount = Payment.objects.filter(
+            user=self.user_id,
+            date__month=month.strftime('%m')
+        ).aggregate(Sum('amount_USD'))
+        return round(amount['amount_USD__sum'], 2)
 
 
 class Method(models.Model):

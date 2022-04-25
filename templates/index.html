@@ -9,12 +9,12 @@
             {% if accrual_balance.current_amount is None %}
                 <h3 class="mb-0">Нет начислений</h3>
             {% else %}
-                <h3 class="mb-0">{{ accrual_balance.current_amount|intcomma }} руб.</h3>
+                <h3 class="mb-0">{{ accrual_balance.current_amount_USD|intcomma }} USD.</h3>
             {% endif %}
             {% if accrual_balance.month_amount is None %}
                 <p class="card-text mb-auto">В этом месяце нет начислений</p>
             {% else %}
-                <p class="card-text mb-auto">В этом месяце {{ accrual_balance.month_amount|intcomma }} руб.</p>
+                <p class="card-text mb-auto">В этом месяце {{ accrual_balance.month_amount_USD|intcomma }} USD.</p>
             {% endif %}
         </div>
       </div>
@@ -26,12 +26,12 @@
             {% if payment_balance.current_amount is None %}
                 <h3 class="mb-0">Нет оплат</h3>
             {% else %}
-                <h3 class="mb-0">{{ payment_balance.current_amount|intcomma }} руб.</h3>
+                <h3 class="mb-0">{{ payment_balance.current_amount_USD|intcomma }} USD.</h3>
             {% endif %}
             {% if payment_balance.month_amount is None %}
                 <p class="card-text mb-auto">В этом месяце нет оплат</p>
             {% else %}
-                <p class="mb-auto">В этом месяце {{ payment_balance.month_amount|intcomma }} руб.</p>
+                <p class="mb-auto">В этом месяце {{ payment_balance.month_amount_USD|intcomma }} USD.</p>
             {% endif %}
 {#          <a href="#" class="stretched-link">Continue reading</a>#}
         </div>
