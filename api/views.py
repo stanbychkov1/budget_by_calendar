@@ -3,6 +3,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Sum
 from django.http import JsonResponse
 from django.views import generic
+from dateutil.relativedelta import relativedelta
+from typing import Dict
 
 from accruals import models
 from accruals.calculate_usd_amount import calc_usd_amount
@@ -87,6 +89,22 @@ class MethodView(LoginRequiredMixin, generic.View):
                                 'success': True,
                                 'dictionary': dict_data
                             })
+
+
+class AccraulMonthlyView(LoginRequiredMixin, generic.View):
+    def get(self, request):
+        dict_data = {}
+        date = datetime.date.today()-relativedelta(months=5)
+        while date <= datetime.date.today():
+            amount = request.user.accruals.filter(date__month=date.month).filter(date__year=date.year).aggregate(Sum('amount_USD'))
+            dict_data[_MONTHS[date.month]] = amount
+            date += relativedelta(months=1)
+        return JsonResponse(status=200,
+                            data={
+                                'success': True,
+                                'dictionary': dict_data
+                            })
+
 
 
 # class AccrualsPaymentApiView(LoginRequiredMixin, generic.View):

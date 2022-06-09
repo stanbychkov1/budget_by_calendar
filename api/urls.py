@@ -9,4 +9,6 @@ urlpatterns = [
          name='ajax_crud_delete'),
     path('methods/', views.MethodView.as_view(),
          name='methods'),
+    path('accruals_monthly/', views.AccraulMonthlyView.as_view(),
+         name='accruals_monthly_amount'),
 ]
