@@ -43,8 +43,11 @@ def uploading_calendar_data(start_date, end_date, user_id):
         #     new_elem = elem.split(':')
         #     event_dict[new_elem[0]] = new_elem[1]
         # Выделяются данные для создания модели
-        date = datetime.datetime.date(
-            vevent.contents['dtstart'][0].value)
+        try:
+            date = datetime.datetime.date(
+                vevent.contents['dtstart'][0].value)
+        except TypeError:
+            date = vevent.contents['dtstart'][0].value
         UUID = vevent.contents['uid'][0].value
         summary = vevent.contents['summary'][0].value
         try:
