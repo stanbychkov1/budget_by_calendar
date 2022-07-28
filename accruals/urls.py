@@ -13,4 +13,6 @@ urlpatterns = [
          name='charts'),
     path('accruals/', views.AccrualView.as_view(),
          name='accruals'),
+    path('patients_summary/', views.PatientsSummaryView.as_view(),
+         name='patients_summary'),
 ]

@@ -4,10 +4,11 @@ from django.db.models import Sum
 from django.http import JsonResponse
 from django.views import generic
 from dateutil.relativedelta import relativedelta
-from typing import Dict
+from rest_framework import generics
 
 from accruals import models
-from accruals.calculate_usd_amount import calc_usd_amount
+
+from .serializers import PaymentSerializer
 
 _MONTHS = {
     1: 'January',
@@ -25,45 +26,9 @@ _MONTHS = {
 }
 
 
-class CreateCrudPaymentView(LoginRequiredMixin, generic.View):
-    def get(self, request):
-        user = self.request.user
-        accrual_id = request.GET.get('id', None)
-        accrual = models.Accrual.objects.get(id=accrual_id)
-        if accrual.paid:
-            return JsonResponse(status=201,
-                                data={'success': True})
-        patient_id = request.GET.get('patient_id', None)
-        amount = request.GET.get('amount', None)
-        date = request.GET.get('date', None)
-        method = request.GET.get('method', None)
-        currency = request.GET.get('currency', None)
-        if len(method) == 0 or method is None:
-            return JsonResponse(status=500,
-                                data={'success': False})
-        if patient_id is None or len(patient_id) == 0:
-            patient_id = accrual.patient_id
-        if amount is None or len(amount) == 0:
-            amount = accrual.amount
-        if date is None or len(date) == 0:
-            date = accrual.date
-        if currency is None:
-            currency = models.Currency.objects.get(iso_code='810').id
-        amount_USD = calc_usd_amount(currency, amount, date)
-        obj = models.Payment.objects.create(
-            user=user,
-            amount=amount,
-            method_id=method,
-            date=date,
-            patient_id=patient_id,
-            currency_id=currency,
-            amount_USD=amount_USD
-        )
-        accrual.paid = True
-        accrual.payment_id = obj.id
-        accrual.save()
-        return JsonResponse(status=201,
-                            data={'success': True})
+class CreatePaymentView(LoginRequiredMixin, generics.CreateAPIView):
+    model = models.Payment
+    serializer_class = PaymentSerializer
 
 
 class DeleteCrudView(LoginRequiredMixin, generic.DeleteView):

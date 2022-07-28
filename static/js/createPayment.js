@@ -1,4 +1,5 @@
-url = '/api/payments/'
+var url = '/api/payments/'
+const csrftoken = getCookie('csrftoken');
 $(".createPayment").click(function() {
     var idInput = $('input[name="formId"]').val().trim();
     var patientidInput = $('input[name="formPatientId"]').val().trim();
@@ -10,10 +11,11 @@ $(".createPayment").click(function() {
         // Create Ajax Call
         $.ajax({
             url: url,
-            type: 'get',
+            type: 'post',
+            headers: {'X-CSRFToken': csrftoken},
             data: {
-                'id': idInput,
-                'patient_id': patientidInput,
+                'accrual_id': idInput,
+                'patient': patientidInput,
                 'date': dateInput,
                 'amount': amountInput,
                 'currency': currencyInput,

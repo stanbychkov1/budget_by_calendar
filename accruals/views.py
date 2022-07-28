@@ -16,18 +16,15 @@ class IndexView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         task = tasks.upload_rates.delay()
-        return models.Accrual.objects.filter(
-            user=self.request.user.id).order_by('-date')[:5]
+        return self.request.user.accruals.order_by('-date')[:5]
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(IndexView, self).get_context_data(**kwargs)
-        accrual_amount = models.Accrual.objects.filter(
-            user=self.request.user.id).last()
-        payment_amount = models.Payment.objects.filter(
-            user=self.request.user.id).last()
+        accrual_amount = self.request.user.accruals.last()
+        payment_amount = self.request.user.payments.last()
+        payment_list = self.request.user.payments.order_by('-date')[:5]
         context.update({
-            'payment_list': models.Payment.objects.filter(
-                user=self.request.user.id).order_by('-date')[:5],
+            'payment_list': payment_list,
             'accrual_balance': accrual_amount,
             'payment_balance': payment_amount,
         })
@@ -40,9 +37,7 @@ class AccrualView(LoginRequiredMixin, generic.ListView):
     template_name = 'accruals.html'
 
     def get_queryset(self):
-        queryset = models.Accrual.objects.filter(
-            user=self.request.user.id
-        ).order_by('-date')
+        queryset = self.request.user.accruals.order_by('-date')
         return queryset
 
 
@@ -70,27 +65,19 @@ class AjaxPaymentView(LoginRequiredMixin, django_filters.views.FilterView):
     filterset_class = filters.AccrualFilter
 
     def get_queryset(self):
-        user = self.request.user
-        unpaid_accruals = models.Accrual.objects.filter(
-            user=user.id,
-            paid=False
-        ).order_by('date')
+        unpaid_accruals = self.request.user.accruals.filter(paid=False)
         return unpaid_accruals
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(AjaxPaymentView, self).get_context_data()
-        user = self.request.user
-        methods = models.Method.objects.filter(user=user)
-        currencies = models.Currency.objects.all().order_by('-priority')
+        methods = self.request.user.methods.all()
+        currencies = models.Currency.objects.order_by('-priority')
         context.update(
             {
                 'methods': methods,
                 'currencies': currencies,
             }
         )
-        # TODO: создать фильтр по клиентов, которые относятся только к
-        #  пользователю, в данный момент выдает всех клиентов ото всех
-        #  пользователей
         return context
 
 
@@ -99,3 +86,13 @@ class ChartsView(LoginRequiredMixin, generic.TemplateView):
 # TODO: создать класс для создания метода ajax.
 #  добавить кнопку создания метода на форму создания оплаты.
 #  создаты страницу с бар-чартами
+
+
+class PatientsSummaryView(LoginRequiredMixin, django_filters.views.FilterView):
+    model = models.Accrual
+    template_name = 'patient_summarty.html'
+    filterset_class = filters.AccrualFilter
+
+    def get_queryset(self):
+        queryset = self.request.user.accruals.prefetch_related('payment')
+        return queryset

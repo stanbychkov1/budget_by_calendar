@@ -9,7 +9,7 @@ mods = (models.Accrual, models.Payment,)
 class Command(BaseCommand):
     def handle(self, *args, **options):
         for mod in mods:
-            non_cur_models = mod.objects.filter(currency=None)
+            non_cur_models = mod.objects.filter(amount_USD=0)
             for model in non_cur_models:
                 model.currency = models.Currency.objects.get(iso_code='810')
                 model.amount_USD = calc_usd_amount(
