@@ -3,8 +3,8 @@
 Hi! My name is Stan and it's my first full-stack app. It works with caldev Calendar.
 If you'd like to control your finance, then welcome. 
 
-You can try this app on this web site: ([http://185.167.99.49](http://185.167.99.49))
-Login/Password: admin/admin
+You can try this app on this web site: [http://185.167.99.49](http://185.167.99.49).
+Login/Password: admin/admin.
 This test app is connected to one of my calendars. Don't be shy, try it.
 
 This app can be helpful for people, who works for themselves.
