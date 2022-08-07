@@ -4,15 +4,16 @@ Hi! My name is Stan and it's my first full-stack app. It works with caldev Calen
 If you'd like to control your finance, then welcome. 
 
 You can try this app on this web site: [http://185.167.99.49](http://185.167.99.49).
-Login/Password: admin/admin.
+
+Login/Password: **admin/admin.**  
 This test app is connected to one of my calendars. Don't be shy, try it.
 
 This app can be helpful for people, who works for themselves.
 Caldev events must be created in one of the calendar, that must be used only for this purpose, you have in your Iphone,
-Mac or another caldev apps. Caldev Events must include two required variables <client_name>/<amount> in summary.
-Example (default currency is Russian Ruble):
-Maria/500
-Julia/350
+Mac or another caldev apps. Caldev Events must include two required variables <client_name>/<amount>/<currency> in summary.
+Example (default currency is Russian Ruble):  
+Maria/500  
+Julia/350  
 Igor/80/USD
 
 
