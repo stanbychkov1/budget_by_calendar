@@ -83,9 +83,6 @@ class AjaxPaymentView(LoginRequiredMixin, django_filters.views.FilterView):
 
 class ChartsView(LoginRequiredMixin, generic.TemplateView):
     template_name = 'charts.html'
-# TODO: создать класс для создания метода ajax.
-#  добавить кнопку создания метода на форму создания оплаты.
-#  создаты страницу с бар-чартами
 
 
 class PatientsSummaryView(LoginRequiredMixin, django_filters.views.FilterView):
