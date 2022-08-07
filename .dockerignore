@@ -18,6 +18,7 @@ static/admin
 static/debug_toolbar
 
 .env
+.env2
 **/.DS_Store
 *.md
 .python-version
