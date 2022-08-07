@@ -6,7 +6,7 @@ let myBarChart = new Chart(ctxB, {
   data: {
     labels: labels_methods,
     datasets: [{
-      label: 'Методы',
+      label: 'Оплаты по методам оплаты',
       data: amounts_methods,
       backgroundColor: [
         'rgba(255, 99, 132, 0.2)',
@@ -43,7 +43,7 @@ let myBarChart2 = new Chart(ctxB2, {
   data: {
     labels: labels_monthly,
     datasets: [{
-      label: 'По месяцам',
+      label: 'Начисления по месяцам',
       data: amounts_monthly,
       backgroundColor: [
         'rgba(255, 99, 132, 0.2)',

@@ -9,11 +9,11 @@ function getMethodsData() {
             success: function (res) {
                 for (const [key, value] of Object.entries(res.dictionary)) {
                    labels.push(key);
-                   amounts.push(value['amount__sum']);
+                   amounts.push(value);
                 }
             },
             error: function () {
-                alert("Что-то пошло не так! Возможно, заполнены не все поля");
+                alert("Что-то пошло не так!");
             }
         });
   return [labels, amounts]
@@ -29,11 +29,11 @@ function getMonthlyAmountData() {
         success: function (res) {
             for (const [key, value] of Object.entries(res.dictionary)) {
                 labels.push(key);
-                amounts.push(value['amount_USD__sum']);
+                amounts.push(value);
             }
         },
         error: function () {
-            alert("Что-то пошло не так! Возможно, заполнены не все поля");
+            alert("Что-то пошло не так!");
         }
     });
     return [labels, amounts]

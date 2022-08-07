@@ -16,6 +16,9 @@
               <a class="nav-link active" href="{% url 'ajax_payment' %}">Неоплаченные сессии</a>
             </li>
             <li class="nav-item">
+              <a class="nav-link active" href="{% url 'patients_summary' %}">Сводные данные</a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link active" href="{% url 'charts' %}">Статистика</a>
             </li>
           {% endif %}
@@ -27,10 +30,6 @@
             <a href="{% url 'login' %}" class="btn btn-outline-success me-2" type="submit">Войти</a>
             <a href="{% url 'signup' %}" class="btn btn-outline-success me-2" type="submit">Зарегистрироваться</a>
         {% endif %}
-{#      <form class="d-flex">#}
-{#        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">#}
-{#        <button class="btn btn-outline-success" type="submit">Search</button>#}
-{#      </form>#}
     </div>
   </div>
 </nav>
