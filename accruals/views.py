@@ -6,6 +6,7 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
+from urllib3.exceptions import NewConnectionError
 
 from . import models, forms, caldav_services, filters, tasks
 
@@ -54,7 +55,7 @@ class CalendarDateFormView(LoginRequiredMixin, generic.FormView):
                                                          end_date,
                                                          user_id)
         if len(errors) != 0:
-            return render(self.request, 'loading_errors.html',
+            return render(self.request, 'misc/loading_errors.html',
                           context={'errors': errors})
         return super().form_valid(form)
 

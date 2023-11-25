@@ -161,7 +161,7 @@ LOGIN_REDIRECT_URL = reverse_lazy('index')
 LOGOUT_REDIRECT_URL = reverse_lazy('index')
 
 # Redis
-REDIS_HOST = 'redis'
+REDIS_HOST = os.environ.get('REDIS_HOST')
 REDIS_PORT = '6379'
 
 # Celery

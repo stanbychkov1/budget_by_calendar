@@ -70,3 +70,4 @@ def addclass(field, arg):
 #         query_string['page'] = kwargs.get('page')
 #
 #     return query_string.urlencode()
+# dict()

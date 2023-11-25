@@ -1,6 +1,9 @@
 import datetime
+from decimal import Decimal
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Sum
+from django.db.models.functions import TruncMonth, Coalesce
 from django.http import JsonResponse
 from django.views import generic
 from dateutil.relativedelta import relativedelta
@@ -54,26 +57,40 @@ class MethodAPIView(LoginRequiredMixin, views.APIView):
             else:
                 dict_data[method.name] = 0
         return Response(data={
-                                'success': True,
-                                'dictionary': dict_data
-                            })
+            'success': True,
+            'dictionary': dict_data
+        })
 
 
 class AccraulMonthlyAPIView(LoginRequiredMixin, views.APIView):
     def get(self, request):
         dict_data = {}
-        date = datetime.date.today()-relativedelta(months=5)
-        while date <= datetime.date.today():
-            amount = request.user.accruals.filter(
-                date__month=date.month).filter(
-                date__year=date.year).aggregate(
-                Sum('amount_USD'))
-            if amount['amount_USD__sum']:
-                dict_data[_MONTHS[date.month]] = int(amount['amount_USD__sum'])
-            else:
-                dict_data[_MONTHS[date.month]] = 0
-            date += relativedelta(months=1)
+
+        tdy = datetime.date.today()
+        delta_date = tdy - relativedelta(months=5)
+
+        currencies = (request.user.accruals
+                      .filter(date__gte=datetime.date(
+            delta_date.year, delta_date.month, 1))
+                      .order_by('currency')
+                      .values_list('currency', 'currency__title')
+                      .distinct())
+
+        for currency_id, currency_title in currencies:
+            amount_list = []
+            for delta in range(5, -1, -1):
+                date = tdy - relativedelta(months=delta)
+                amount = request.user.accruals.filter(
+                    date__month=date.month,
+                    date__year=date.year,
+                    currency=currency_id
+                ).aggregate(Sum('amount_USD'))
+                if amount['amount_USD__sum']:
+                    amount_list.append(amount['amount_USD__sum'])
+                else:
+                    amount_list.append(0)
+            dict_data[currency_title] = amount_list
         return Response(data={
-                                'success': True,
-                                'dictionary': dict_data
-                            })
+            'success': True,
+            'dictionary': dict_data
+        })

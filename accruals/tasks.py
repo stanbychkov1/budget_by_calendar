@@ -16,9 +16,6 @@ def upload_rates(self):
         last_date = obj.date + datetime.timedelta(days=1)
     else:
         last_date = datetime.date(2021, 9, 1)
-    while last_date <= datetime.date.today():
-        month = str(last_date.month).zfill(2)
-        day = str(last_date.day).zfill(2)
-        get_rates(last_date, month, day)
+    while last_date < datetime.date.today():
+        get_rates(last_date=last_date, url_date=last_date)
         last_date += datetime.timedelta(days=1)
-

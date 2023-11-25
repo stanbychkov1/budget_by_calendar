@@ -21,5 +21,4 @@ class NewRangeWidget(DateRangeWidget):
 class AccrualFilter(FilterSet):
     patient = filters.ModelChoiceFilter(queryset=user_patients)
     date = filters.DateFromToRangeFilter(
-        # widget=NewRangeWidget
     )

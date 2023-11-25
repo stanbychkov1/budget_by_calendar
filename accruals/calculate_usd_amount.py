@@ -41,7 +41,7 @@ def calc_usd_amount(currency, amount, date):
     except models.Rate.MultipleObjectsReturned:
         query_to_delete = models.Rate.objects.filter(date=date)
         query_to_delete.delete()
-        get_rates(date, date.month, date.day)
+        get_rates(last_date=date, url_date=date)
         usd_rate = models.Rate.objects.get(
             currency__iso_title='USD',
             date=date

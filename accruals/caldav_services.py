@@ -1,6 +1,5 @@
 import os
 import datetime
-from decimal import Decimal as dec
 
 import caldav
 from dotenv import load_dotenv
@@ -17,32 +16,29 @@ CAL_NAME = os.getenv('CAL_NAME')
 
 
 def uploading_calendar_data(start_date, end_date, user_id):
+    error_list = []
+    vevents = []
+
     # Подключение к серверу
     client = caldav.DAVClient(url=URL, username=USER_NAME, password=PASSWORD)
     # Получение индивидуальной ссылки к календарям
-    my_principal = client.principal()
+    try:
+        my_principal = client.principal()
+    except OSError as e:
+        error_list.append('Отсутствует подключение к интернету')
+        return error_list
+
     # Получение данных из "рабочего" календаря
     events = my_principal.calendar(name=CAL_NAME).date_search(
         start=start_date,
         end=end_date,
-        # compfilter=None,
         expand=True
     )
-    error_list = []
-    vevents = []
 
     for event in events:
         vevents.extend(event.vobject_instance.contents['vevent'])
 
     for vevent in vevents:
-        # Получаемую строку события изменяем в словарь
-        # event_dict = {}
-        # for elem in event.data.split('\n')[:-1]:
-        #     if ':' not in elem:
-        #         elem += ':'
-        #     new_elem = elem.split(':')
-        #     event_dict[new_elem[0]] = new_elem[1]
-        # Выделяются данные для создания модели
         try:
             date = datetime.datetime.date(
                 vevent.contents['dtstart'][0].value)

@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 {% block content %}
+    <div class="single-card__header-info">
     {% for error in errors %}
-    <ul>{{ error }}</ul>
+
+        <h1 class="single-card__title">{{ error }}</h1>
+
     {% endfor %}
+    </div>
 {% endblock content %}
