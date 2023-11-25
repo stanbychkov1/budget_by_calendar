@@ -1,7 +1,9 @@
 import os
 import datetime
+from decimal import DecimalException
 
 import caldav
+from django.core.exceptions import ValidationError
 from dotenv import load_dotenv
 
 from . import models
@@ -29,12 +31,12 @@ def uploading_calendar_data(start_date, end_date, user_id):
         return error_list
 
     # Получение данных из "рабочего" календаря
-    events = my_principal.calendar(name=CAL_NAME).date_search(
+    events = my_principal.calendar(name=CAL_NAME).search(
         start=start_date,
         end=end_date,
+        event=True,
         expand=True
     )
-
     for event in events:
         vevents.extend(event.vobject_instance.contents['vevent'])
 
@@ -83,7 +85,11 @@ def uploading_calendar_data(start_date, end_date, user_id):
                     currency=currency,
                     amount_USD=amount_USD
                 )
-        except ValueError:
+        except (ValueError, DecimalException):
+            error_list.append(f'Не загружено событие от {date} c UUID {UUID}'
+                              f' и данными {summary}')
+            continue
+        except ValidationError:
             error_list.append(f'Не загружено событие от {date} c UUID {UUID}'
                               f' и данными {summary}')
             continue

@@ -3,7 +3,7 @@
     <div class="single-card__header-info">
     {% for error in errors %}
 
-        <h1 class="single-card__title">{{ error }}</h1>
+        <h2 class="single-card__title">{{ forloop.counter }}. {{ error }}</h2>
 
     {% endfor %}
     </div>

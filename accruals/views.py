@@ -55,7 +55,7 @@ class CalendarDateFormView(LoginRequiredMixin, generic.FormView):
                                                          end_date,
                                                          user_id)
         if len(errors) != 0:
-            return render(self.request, 'misc/loading_errors.html',
+            return render(self.request, 'misc/errors.html',
                           context={'errors': errors})
         return super().form_valid(form)
 
